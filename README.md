@@ -3,7 +3,7 @@
 This is the official repository for the paper:  
 **CMOS-Compatible Three-dimensional Inductor by Self-rolled-up Soft Ferromagnetic Membrane Technology**
 
-The complete simulation code and all simulation files required to reproduce the results presented in Fig. 1b are available in the uploaded folder.
+The complete calculation code and all calculation files required to reproduce the results presented in Fig. 1b are available in the uploaded folder.
 
 ## Requirements
 
