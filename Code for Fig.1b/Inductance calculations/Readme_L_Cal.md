@@ -39,6 +39,3 @@ Finally, the results are plotted, showing inductance and mutual inductance versu
    - Converts cylindrical coordinates (*r, θ*) to Cartesian (*x, y, z*).  
    - **Uses the Biot-Savart law** to compute the contribution of each segment.  
    - **Summarizes the z-component** of the magnetic field.
-
-#### **Application:**
-This function models the **magnetic field distribution of a solenoid or thick current loop**, useful for **electromagnetism and coil design simulations**.
