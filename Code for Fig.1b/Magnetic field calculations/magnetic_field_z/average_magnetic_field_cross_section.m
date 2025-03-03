@@ -1,35 +1,35 @@
-function Bz_avg_cross_section = average_magnetic_field_cross_section(r,z_fixed, R, t, w, nR, nH)
-    % 参数说明:
-    % z_fixed: 横截面固定的z坐标
-    % R: 电流环的半径
-    % t: 电流环的厚度
-    % w: 电流环的高度
-    % nR: 厚度方向上的离散点数
-    % nH: 高度方向上的离散点数
+function Bz_avg_cross_section = average_magnetic_field_cross_section(r, z_fixed, R, t, w, nR, nH)
+    % Parameter description:
+    % z_fixed: Fixed z-coordinate of the cross-section
+    % R: Radius of the current loop
+    % t: Thickness of the current loop
+    % w: Height of the current loop
+    % nR: Number of discrete points in the thickness direction
+    % nH: Number of discrete points in the height direction
     grid_size = 70;
     
-    % 定义r和theta的范围
-    r_values = linspace(0, r , grid_size); % 半径范围
-    theta_values = linspace(0, 2 * pi, grid_size); % 角度范围
-    [r_grid, theta_grid] = meshgrid(r_values, theta_values); % 创建网格
+    % Define the range of r and theta
+    r_values = linspace(0, r, grid_size); % Radius range
+    theta_values = linspace(0, 2 * pi, grid_size); % Angle range
+    [r_grid, theta_grid] = meshgrid(r_values, theta_values); % Create grid
     
-    % 初始化磁场总和
+    % Initialize the total magnetic field
     Bz_total = 0;
     
-    % 计算每个网格点上的磁场
+    % Compute the magnetic field at each grid point
     for i = 1:grid_size-1
         for j = 1:grid_size-1
             r = r_grid(i, j);
             theta = theta_grid(i, j);
             
-            % 调用之前的函数计算每个点的磁场z分量
+            % Call the previous function to compute the z-component of the magnetic field at each point
             Bz = magnetic_field_z(r, theta, z_fixed, R, t, w, nR, nH);
             
-            % 累加磁场强度
+            % Accumulate the magnetic field strength
             Bz_total = Bz_total + Bz;
         end
     end
     
-    % 计算横截面的平均磁场强度
+    % Compute the average magnetic field strength of the cross-section
     Bz_avg_cross_section = Bz_total / ((grid_size-1)^2);
 end
