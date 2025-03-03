@@ -1,50 +1,50 @@
 function Bz = magnetic_field_z(r, theta, z, R, t, h, nR, nH)
-    % 定义常量
-    I_total = 1; % 总电流，单位：安培
-    mue0 = 4*pi*10^(-7); % 真空磁导率，单位：N/A^2
-    nL = 30; % 每个电流回路的分段数
-    dR = t / nR; % 厚度方向离散化增量
-    dH = h / nH; % 高度方向离散化增量
-    I_per_ring = I_total / (nH*nR); % 每个小环的电流
+    % Define constants
+    I_total = 1; % Total current, unit: Ampere
+    mue0 = 4*pi*10^(-7); % Vacuum permeability, unit: N/A^2
+    nL = 30; % Number of segments per current loop
+    dR = t / nR; % Discretization increment in the thickness direction
+    dH = h / nH; % Discretization increment in the height direction
+    I_per_ring = I_total / (nH*nR); % Current for each small loop
 
-    % 初始化 Bz 分量
+    % Initialize Bz component
     Bz = 0;
 
-    % 对高度方向的每个小电流环进行积分
-    for zL = -h/2:dH:h/2 % 从 -h/2 到 h/2 高度的电流环
-        % 对厚度方向的每个小环进行积分
+    % Integrate over each small current loop in the height direction
+    for zL = -h/2:dH:h/2 % Current loops from -h/2 to h/2 in height
+        % Integrate over each small loop in the thickness direction
         for rL = R:dR:(R+t)
-            % 定义电流回路参数化
-            phi = linspace(0, 2*pi, nL); % 角度 phi 从 0 到 2*pi 的分布
-            xL = rL * cos(phi); % 电流回路的 x 坐标
-            yL = rL * sin(phi); % 电流回路的 y 坐标
-            zL_array = zL * ones(size(xL)); % 电流回路的 z 坐标位于 zL 平面
+            % Define current loop parameterization
+            phi = linspace(0, 2*pi, nL); % Angle phi distributed from 0 to 2*pi
+            xL = rL * cos(phi); % x-coordinates of the current loop
+            yL = rL * sin(phi); % y-coordinates of the current loop
+            zL_array = zL * ones(size(xL)); % z-coordinates of the current loop at plane zL
 
-            % 将电流回路的点放入矩阵 L
+            % Store current loop points in matrix L
             L = [xL', yL', zL_array'];
 
-            % 将柱坐标转换为笛卡尔坐标
-            x = r * cos(theta); % 将 r, theta 转换为 x
-            y = r * sin(theta); % 将 r, theta 转换为 y
+            % Convert cylindrical coordinates to Cartesian coordinates
+            x = r * cos(theta); % Convert r, theta to x
+            y = r * sin(theta); % Convert r, theta to y
 
-            % 对当前厚度和高度下的电流回路计算磁场
+            % Compute the magnetic field for the current loop at the current thickness and height
             for i = 1:nL
                 if i == nL
-                    dL = L(end, :) - L(1, :); % 最后一个线元
-                    vec = (L(end, :) + L(1, :)) * 0.5; % 电流元中点
+                    dL = L(end, :) - L(1, :); % Last line segment
+                    vec = (L(end, :) + L(1, :)) * 0.5; % Midpoint of the current element
                 else
-                    dL = L(i+1, :) - L(i, :); % i 个电流元
-                    vec = (L(i+1, :) + L(i, :)) * 0.5; % 电流元中点
+                    dL = L(i+1, :) - L(i, :); % i-th current element
+                    vec = (L(i+1, :) + L(i, :)) * 0.5; % Midpoint of the current element
                 end
 
-                % 计算位置矢量
-                vecR = [x, y, z]; % 待计算点位置矢量
-                vecd = vecR - vec; % 电流元中点到该点的矢量
+                % Compute position vector
+                vecR = [x, y, z]; % Position vector of the point to be calculated
+                vecd = vecR - vec; % Vector from the midpoint of the current element to the point
 
-                % 计算磁场增量，使用毕奥-萨伐尔定律
+                % Compute the magnetic field increment using Biot-Savart's law
                 dB = mue0 * I_per_ring / (4 * pi) * cross(dL', vecd') / (norm(vecd)^3); 
 
-                % 只保留磁场的 z 分量
+                % Retain only the z-component of the magnetic field
                 Bz = Bz + dB(3);
             end
         end
