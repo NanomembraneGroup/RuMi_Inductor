@@ -7,7 +7,7 @@ The complete calculation code and all calculation files required to reproduce th
 
 The code files used for the calculations are divided into two parts: **Inductance calculations** and **Magnetic field calculations**. To maintain code organization, the main functions are defined in separate MATLAB files, and their physical significance and functionality are explained in the **Readme_L_Cal.md**, **Readme_magnetic_field_z.md**, and **Readme_Zp_t.md** files.
 
-Finally, all the defined functions are referenced in the main program **fig1b_result.m**, which generates the results shown in **Figure. 1b** of the main text. For detailed calculation principles, please refer to **Supplementary Note 1 & 2**.
+Finally, all the defined functions are referenced in the main program **corecode.m**, which generates the results shown in **Figure. 1b** of the main text. For detailed calculation principles, please refer to **Supplementary Note 1 & 2**.
 
 ## Requirements
 
