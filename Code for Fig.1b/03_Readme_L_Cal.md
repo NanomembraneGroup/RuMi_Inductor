@@ -1,4 +1,4 @@
-# fig1b_result.m: Inductance and Mutual Inductance Calculation
+# corecode.m: Inductance and Mutual Inductance Calculation
 
 **`corecode.m`** 
 
