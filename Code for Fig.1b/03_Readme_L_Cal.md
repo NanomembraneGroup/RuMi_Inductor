@@ -1,15 +1,34 @@
 # fig1b_result.m: Inductance and Mutual Inductance Calculation
 
-**`fig1b_result.m`** calculates **inductance** (*L*) and **mutual inductance** (*M*) for a coil system with varying turns (*n*). It defines key parameters such as conductor width (*w*), thickness (*h*), coil radius (*R*), and relative permeability (*μr*).
+**`corecode.m`** 
 
-The script precomputes total conductor lengths for different coil structures and initializes storage arrays for *L3*, *L4*, *M3*, *M4*, *L5*, *L6*, *M5*, and *M6*. A loop iterates over different turn numbers (*n*), computing:
+computes the magnetic field distribution and related **inductance** (*L*) and **mutual inductance** (*M*) for a coil system with varying turns (*n*). It defines key parameters such as conductor width (*w*), thickness (*h*), coil radius (*R*), and relative permeability (*μr*). The key sections are:
 
-- **L3 and M3** using functions from `L1.m` and `Mc1.m`, considering self- and mutual inductance between turns.
-- **L4 and M4**, including additional magnetic effects via `L_magnetic.m` and `Zp_t.m`.
-- **L5 and M5**, based on the average magnetic field (*B_z*) from `magnetic_field_z.m` within a circular coil.
-- **L6 and M6**, incorporating *μr* and field contributions from adjacent layers.
+## 1. Parameter Initialization
+Defines coil parameters:
+- **Width (`w`)**, **Height (`h`)**, **Radius (`R`)**  
+- **Relative Permeability (`mu_r`)**, **Thickness (`T`)**, **Number of turns (`turns`)**
 
-Finally, the results are plotted, showing inductance and mutual inductance versus total conductor length. The script effectively models inductive properties of spiral and circular coils, accounting for geometry and magnetic effects.
+## 2. Index List Construction
+- A nested loop generates `(k, j)` pairs while ensuring `k ≤ j` to avoid redundant calculations.  
+- These pairs are stored in `indexList`.
+
+## 3. Magnetic Field Calculation (Parallel Processing)
+- A `parfor` loop computes the magnetic field for each `(k, j)` pair:
+  - `Bz_avg_1`: Average magnetic field in the **z-direction**.
+  - `Bz_avg_2`: Average field in the **x-direction**.
+- Results are stored in `result1` and `result2`, then reconstructed into symmetric matrices `Bz_avg1_3D` and `Bz_avg2_3D`.
+
+## 4. Inductance & Mutual Inductance Calculation
+- **`L3`, `L4`, `M3`, `M4`**: Computed based on **width (`w`)** effects.
+- **`L5`, `L6`, `M5`, `M6`**: Computed based on **radius (`R`)** effects.
+- Uses functions like:
+  - `L1()`, `Mc1()`: Magnetic calculations.
+  - `L_magnetic()`, `Zp_t()`: Further physical computations.
+
+## 5. Plotting
+- **First subplot**: `L3`, `L4`, `M3`, `M4` vs. `l_tot_1`
+- **Second subplot**: `L5`, `L6`, `M5`, `M6` vs. `l_tot_2`
 
 ## **Function Descriptions**
 
