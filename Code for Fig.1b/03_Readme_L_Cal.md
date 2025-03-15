@@ -1,8 +1,6 @@
 # corecode.m: Inductance and Mutual Inductance Calculation
 
-**`corecode.m`** 
-
-computes the magnetic field distribution and related **inductance** (*L*) and **mutual inductance** (*M*) for a coil system with varying turns (*n*). It defines key parameters such as conductor width (*w*), thickness (*h*), coil radius (*R*), and relative permeability (*μr*). The key sections are:
+**`corecode.m`** computes the magnetic field distribution and related **inductance** (*L*) and **mutual inductance** (*M*) for a coil system with varying turns (*n*). It defines key parameters such as conductor width (*w*), thickness (*h*), coil radius (*R*), and relative permeability (*μr*). The key sections are:
 
 ## 1. Parameter Initialization
 Defines coil parameters:
