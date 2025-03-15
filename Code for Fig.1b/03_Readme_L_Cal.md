@@ -14,9 +14,7 @@ Defines coil parameters:
 - These pairs are stored in `indexList`.
 
 ## 3. Magnetic Field Calculation (Parallel Processing)
-- A `parfor` loop computes the magnetic field for each `(k, j)` pair:
-  - `Bz_avg_1`: Average magnetic field in the **z-direction**.
-  - `Bz_avg_2`: Average field in the **x-direction**.
+- A `parfor` loop computes the magnetic field for each `(k, j)` pair.
 - Results are stored in `result1` and `result2`, then reconstructed into symmetric matrices `Bz_avg1_3D` and `Bz_avg2_3D`.
 
 ## 4. Inductance & Mutual Inductance Calculation
