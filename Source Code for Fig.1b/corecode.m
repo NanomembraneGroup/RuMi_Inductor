@@ -1,70 +1,14 @@
 % Parameters
 w = 15e-6;
-h = 300e-9;
+h = 380e-9;
 R = 120e-6;
 mu_r = 25;
 T = 1;
-turns = 15;
-
-num_points = turns;  % k and j take values from 1 to 15
-nPairs = num_points * (num_points + 1) / 2;  % Total number of pairs in the upper triangular part
-
-% Construct the index list for (k, j) pairs (upper triangular only, ensuring k <= j)
-indexList = zeros(nPairs, 2);
-count = 0;
-for k = 1:num_points
-    for j = k:num_points
-        count = count + 1;
-        indexList(count, :) = [k, j];
-    end
-end
-
-% Preallocate arrays for storing computed results
-result1 = zeros(nPairs, 1);
-result2 = zeros(nPairs, 1);
-
-% Use a single parfor loop to iterate over all (k, j) pairs in parallel
-parfor idx = 1:nPairs
-    k = indexList(idx, 1);
-    j = indexList(idx, 2);
-    
-    % Calculate Bz_avg_1
-    z_coord     = R + (k - 1) * 2 * h;
-    other_coord = R + (j - 1) * 2 * h;
-    result1(idx) = average_magnetic_field_Z_range(...
-                        z_coord, -w/2, w/2, other_coord, h, w, 50, 50);
-                    
-    % Calculate Bz_avg_2
-    x_coord     = R - (k - j) * 2 * h;
-    result2(idx) = average_magnetic_field_on_line(...
-                        x_coord, 0, -w/2, w/2, other_coord, h, w, 50, 50, 50);
-end
-
-% Reconstruct the complete symmetric matrix
-Bz_avg_1_temp = zeros(num_points, num_points);
-Bz_avg_2_temp = zeros(num_points, num_points);
-count = 0;
-for k = 1:num_points
-    for j = k:num_points
-        count = count + 1;
-        Bz_avg_1_temp(k, j) = result1(count);
-        Bz_avg_2_temp(k, j) = result2(count);
-        if k ~= j
-            % Assign symmetric values using symmetry
-            Bz_avg_1_temp(j, k) = result1(count);
-            Bz_avg_2_temp(j, k) = result2(count);
-        end
-    end
-end
-
-% Store results in two 3D arrays (the third dimension is currently 1, but can be extended)
-Bz_avg1_3D = zeros(num_points, num_points, 1);
-Bz_avg2_3D = zeros(num_points, num_points, 1);
-Bz_avg1_3D(:, :, 1) = Bz_avg_1_temp;
-Bz_avg2_3D(:, :, 1) = Bz_avg_2_temp;
-
+data = load('Bz_avg.mat');
+Bz_avg1_3D = data.Bz_avg1_3D;
+Bz_avg2_3D = data.Bz_avg2_3D;
 % Initialize variables
-n_values = 1:turns; % Number of turns (n)
+n_values = 1:15; % Number of turns (n)
 l_tot_1_values = 100*4 * (n_values.^2+n_values) * w; % Total length for L3, M3, L4, M4
 l_tot_2_values = 100*2 * pi * R * n_values; % Total length for L5, M5, L6, M6
 
@@ -86,10 +30,10 @@ for idx = 1:length(n_values)
     L_3 = 0; M_3 = 0;
     L_4 = 0; M_4 = 0; M_4_mag = 0;
     
-    % Compute L3
+      % Compute L3
     for i = 1:n
-        l = 2 * i * w;
-        if i == 1
+        l = 2 * i * w ;
+        if i ==1
             L_3 = L_3 + 4 * L1(w, h, T, l - w) - 4 * 1e9 * Mc1(l, l-w); 
         else
             L_3 = L_3 + 3 * L1(w, h, T, l - w) + L1(w, h, T, l - 2*w) - 4 * 1e9 * Mc1(l, l-w);
@@ -101,7 +45,7 @@ for idx = 1:length(n_values)
         for j = 1:i-1
             l1 = 2 * i * w;
             l2 = 2 * j * w;
-            M_3 = M_3 + 1e9 * 2 * 4 * ((Mc1((l1 + l2) / 2, (i - j) * w) - Mc1((l1 - l2) / 2, (i - j) * w)) - (Mc1((l1 + l2) / 2, (i + j - 1) * w) - Mc1((l1 - l2) / 2, (i + j - 1) * w)));
+            M_3 = M_3 + 1e9 * 2 * 4 * ((Mc1((l1 + l2) / 2, (i - j) * w) - Mc1((l1 - l2) / 2, (i - j) * w))-(Mc1((l1 + l2) / 2, (i + j - 1) * w) - Mc1((l1 - l2) / 2, (i + j - 1) * w)));
         end
     end
     
@@ -140,7 +84,7 @@ for idx = 1:length(n_values)
                
     for j = 2:n
         for k = 1:j-1 
-            M_5 = M_5 + 2 * 1e9 * Bz_avg1_3D(j,k,1) *  pi * (R + (k - 1) * h)^2;
+            M_5 = M_5 + 2 * 1e9 * Bz_avg1_3D(j,k,1) *  pi * (R + (k - 1)*h)^2;
         end
     end
     
@@ -156,7 +100,7 @@ for idx = 1:length(n_values)
     for j = 2:n
         for k = 1:j-1
             for m = 1:k
-                M_6_mag = M_6_mag + 2 * 1e9 * mu_r * Bz_avg2_3D(j-m+1,j,1) * 2 * pi * (R - (m - j) * 2 * h) * h;
+                M_6_mag = M_6_mag + 2*1e9 * mu_r * Bz_avg2_3D(j-m+1,j,1) * 2 * pi * (R - (m - j) * 2 * h) * h;
             end
         end
     end
@@ -191,4 +135,18 @@ xlabel('l_{tot,2} (m)');
 ylabel('Inductance/Mutual (H)');
 legend;
 grid on;
-title('L5, L6, M5, M6 vs l_{tot,2}');
+title('L5, L6, M5, M6 vs l_{tot,2}'); 
+
+% Save the plot
+saveas(gcf, '/fig1b.png');  % Save the figure as a PNG file
+
+% Prepare data for Excel output
+output_data = table(n_values', L3_values', M3_values', L4_values', M4_values', ...
+    L5_values', M5_values', L6_values', M6_values', 'VariableNames', ...
+    {'Turn Number', 'L3', 'M3', 'L4', 'M4', 'L5', 'M5', 'L6', 'M6'});
+
+% Save to Excel file
+filename = '/fig1b.xlsx';
+writetable(output_data, filename);
+
+disp(['Results saved']);

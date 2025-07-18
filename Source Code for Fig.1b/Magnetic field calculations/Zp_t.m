@@ -1,4 +1,4 @@
-function result = Zp_t(mu_r, h, r1, r2, a1, a2, t)
+function result = Zp_t2(mu_r, h, r1, r2, a1, a2, t)
     % Computes Zp_t based on the given integrand and numerical integral
     
     % Define constants
