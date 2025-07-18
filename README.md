@@ -53,7 +53,38 @@ No additional environment configuration is required after installation. All nece
 
 # Demo
 
+## Instructions to run on data：
+Place all the code files in the same directory path. Then select and run the code from the "corecode" file in matlab. You can define specific parameter values in the file, such as Width (w), Height (h), Radius (R), Relative Permeability (μ_r), Thickness (T), and Number of Turns (turns).
 
+```
+w = 15e-6;
+h = 380e-9;
+R = 120e-6;
+mu_r = 25;
+T = 1;
+```
+
+## Expected output：
+Running the code will directly generate the curve corresponding to Fig. 1b in the manuscript, along with the Excel data. You can modify the path '/fig1b.xlsx' to save the results to a specific location.
+
+```
+% Save the plot
+saveas(gcf, '/fig1b.png');  % Save the figure as a PNG file
+
+% Prepare data for Excel output
+output_data = table(n_values', L3_values', M3_values', L4_values', M4_values', ...
+    L5_values', M5_values', L6_values', M6_values', 'VariableNames', ...
+    {'Turn Number', 'L3', 'M3', 'L4', 'M4', 'L5', 'M5', 'L6', 'M6'});
+
+% Save to Excel file
+filename = '/fig1b.xlsx';
+writetable(output_data, filename);
+
+disp(['Results saved']);
+```
+
+## Expected run time for demo on a "normal" desktop computer：
+Typically, the runtime for the corecode is about 5-10 seconds based on pre-calculated magnetic field data. You can also check the accuracy of the magnetic field data by running Bz_avg to obtain results. Generally, running with 20 cores on a Windows Server will take around 4-5 hours for the calculation.
 
 # License
 
