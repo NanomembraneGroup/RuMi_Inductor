@@ -5,13 +5,13 @@ This is the official repository for the paper:
 
 # Overview
 
-The complete calculation code and all calculation files required to reproduce the results presented in **Figure. 1b & 1c** are available in the uploaded folder. The package utilizes a simple class structure to enhance usability while also allowing easy extension of the package for developers. The source code can be executed and produce results on any major operating system with a compatible version of MATLAB installed.
+The complete calculation code and all calculation files required to reproduce the results presented in **Figure. 1b** are available in the uploaded folder. The package utilizes a simple class structure to enhance usability while also allowing easy extension of the package for developers. The source code can be executed and produce results on any major operating system with a compatible version of MATLAB installed.
 
 # Documentation
 
-The code files used for the calculations are divided into two parts: **Inductance calculations** and **Magnetic field calculations**. To maintain code organization, the main functions are defined in separate MATLAB files, and their physical significance and functionality are explained in the **Readme_L_Cal.md**, **Readme_magnetic_field_z.md**, and **Readme_Zp_t.md** files.
+The code files used for the calculations are divided into two parts: **Inductance calculations** and **Magnetic field calculations**. To maintain code organization, the main functions are defined in separate MATLAB files, and their physical significance and functionality are explained in the **Readme_L_Cal.md**, **Readme_magnetic_field_z.md**, and **Readme_Zp_t.md** files, respectively.
 
-Finally, all the defined functions are referenced in the main program **corecode.m**, which generates the results shown in **Figure. 1b &1c** of the main text. For detailed calculation principles, please refer to **Supplementary Note 1 & 2**.
+Finally, all the defined functions are referenced in the main program **corecode.m**, which generates the results shown in **Figure. 1b** of the main text. For detailed calculation, please refer to **Supplementary Note 1 & 2**.
 
 # System Requirements
 
